@@ -4,134 +4,245 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>煙寿 -enju- 会員証</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap">
+
 <style>
   :root {
-    --gold: #c9a24b;
-    --gold-light: #e6c877;
-    --bg: #0e0e0e;
-    --card-bg: #161616;
+    --gold:        #C9A24B;
+    --gold-light:  #E7CF92;
+    --ink:         #EDE9E1;
+    --ink-dim:     #9C9689;
+    --ink-faint:   #6E6A62;
+    --card-bg:     #060606;
+
+    --mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --gothic: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   }
+
   * { box-sizing: border-box; }
+
   body {
     margin: 0;
     min-height: 100vh;
-    background: var(--bg);
-    color: #f2f2f2;
-    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    min-height: 100dvh;
+    background: #000;
+    color: var(--ink);
+    font-family: var(--gothic);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
+    -webkit-font-smoothing: antialiased;
   }
+
+  /* ============================================================
+     カード本体 ── 「極」の枠に「煙」を流し込んだデザイン
+     ============================================================ */
+
   .card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     width: 100%;
     max-width: 360px;
-    background: linear-gradient(160deg, var(--card-bg), #0a0a0a);
-    border: 1px solid var(--gold);
-    border-radius: 16px;
-    padding: 28px 24px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  }
-  .brand {
-    text-align: center;
-    letter-spacing: 0.15em;
-    color: var(--gold-light);
-    font-size: 13px;
-    margin-bottom: 4px;
-  }
-  .brand-en {
-    text-align: center;
-    letter-spacing: 0.1em;
-    color: #8a8a8a;
-    font-size: 11px;
-    margin-bottom: 24px;
-  }
-  .label {
-    font-size: 12px;
-    color: #9a9a9a;
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-  }
-  .member-no {
-    font-size: 40px;
-    font-weight: bold;
-    color: var(--gold-light);
-    letter-spacing: 0.05em;
-    margin-bottom: 20px;
-    font-variant-numeric: tabular-nums;
-  }
-  .row {
+    min-height: 232px;
     display: flex;
-    justify-content: space-between;
+    gap: 18px;
+    padding: 30px 22px 26px;
+    background: var(--card-bg);
+    border: 1px solid rgba(201, 162, 75, .38);
+    border-radius: 4px;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, .6);
+    animation: rise .9s cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  /* 漂う煙 */
+  .smoke {
+    position: absolute;
+    inset: -32%;
+    z-index: 0;
+    background:
+      radial-gradient(38% 32% at 26% 30%, rgba(201, 162, 75, .26), transparent 68%),
+      radial-gradient(32% 28% at 72% 60%, rgba(122, 148, 158, .20), transparent 70%),
+      radial-gradient(28% 24% at 50% 90%, rgba(201, 162, 75, .13), transparent 72%);
+    filter: blur(30px);
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+
+  /* 四隅を沈ませて、煙が枠に触れないようにする */
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    box-shadow: inset 0 0 64px 22px rgba(0, 0, 0, .62);
+  }
+
+  .body,
+  .spine { position: relative; z-index: 2; }
+
+  .body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 縦組みの店名 */
+  .spine {
+    flex: 0 0 auto;
+    writing-mode: vertical-rl;
+    font-family: var(--mincho);
+    font-weight: 600;
+    font-size: 21px;
+    letter-spacing: .34em;
+    color: var(--gold);
+    border-left: 1px solid rgba(201, 162, 75, .22);
+    padding-left: 14px;
+  }
+  .spine em {
+    font-style: normal;
+    display: block;
+    font-family: var(--gothic);
+    font-weight: 400;
+    font-size: 8px;
+    letter-spacing: .3em;
+    color: var(--ink-faint);
+    margin-top: 10px;
+  }
+
+  /* 会員番号まわり */
+  .label {
+    font-size: 10px;
+    letter-spacing: .3em;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+
+  .member-no {
+    font-family: var(--mincho);
+    font-weight: 400;
+    font-size: 54px;
+    line-height: 1;
+    letter-spacing: .06em;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(100deg, #7E611F 0%, #D9BC7A 32%, #F7EDD2 44%, #C9A24B 58%, #8A6A28 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .rule {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(201, 162, 75, .55), transparent);
+    margin: 22px 0 14px;
+  }
+
+  .foot {
+    display: flex;
     align-items: center;
-    border-top: 1px solid #2a2a2a;
-    padding-top: 14px;
-    margin-top: 14px;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
   }
   .name {
-    font-size: 15px;
-  }
-  .badge {
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--gold);
-    color: var(--gold-light);
-  }
-  .state {
-    text-align: center;
-    color: #b5b5b5;
     font-size: 14px;
-    padding: 20px 0;
+    letter-spacing: .04em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .error {
-    color: #e07a7a;
+  .status {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: var(--ink-dim);
   }
-  .note {
-    margin-top: 20px;
-    font-size: 11px;
-    color: #6f6f6f;
-    text-align: center;
-    line-height: 1.6;
+  .status::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .status.is-inactive::before { background: #4E4B45; }
+
+  /* 読み込み中・エラー時 */
+  .state {
+    margin: auto 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+    letter-spacing: .04em;
+  }
+  .state.is-error { color: #D08C86; }
+
+  /* ---------- 動き ---------- */
+
+  @keyframes drift {
+    0%   { transform: translate3d(0, 0, 0) scale(1); }
+    50%  { transform: translate3d(6%, -5%, 0) scale(1.12); }
+    100% { transform: translate3d(-5%, 4%, 0) scale(1.04); }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .reveal { animation: fade .55s ease both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .smoke, .card, .reveal { animation: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="card" id="card">
-  <div class="brand">煙 寿</div>
-  <div class="brand-en">- e n j u -  M E M B E R S H I P</div>
-  <div id="content" class="state">読み込み中...</div>
+<div class="card">
+  <div class="smoke" aria-hidden="true"></div>
+
+  <div class="body" id="content">
+    <div class="state">読み込み中...</div>
+  </div>
+
+  <div class="spine">煙寿<em>ENJU</em></div>
 </div>
 
 <!-- LIFF SDK -->
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
-  // ▼▼▼ ここの2つを、実際の値に差し替えてください ▼▼▼
+  // ▼▼▼ この2行は今動いている値です。もし違っていたら、現在のindex.htmlの値をそのまま使ってください ▼▼▼
   var LIFF_ID = '2011054984-IWt9nIdg'; // LINE DevelopersでLIFFアプリを作成後に発行されるID
-var GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwuPriA9icKvO2hCBsmh0U6MjYU8qDEUY-5zcOdrDRcGBTAgn8wDF044JIaT2HOMofz/exec'
-; // Apps Scriptの「デプロイ」で発行された /exec URL
+  var GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwuPriA9icKvO2hCBsmh0U6MjYU8qDEUY-5zcOdrDRcGBTAgn8wDF044JIaT2HOMofz/exec'; // Apps Scriptの「デプロイ」で発行された /exec URL
   // ▲▲▲ ここまで ▲▲▲
 
   var contentEl = document.getElementById('content');
 
   function showState(html, isError) {
-    contentEl.className = isError ? 'state error' : 'state';
-    contentEl.innerHTML = html;
+    contentEl.innerHTML = '<div class="state' + (isError ? ' is-error' : '') + '">' + html + '</div>';
   }
 
   function showCard(data) {
-    var statusLabel = data.status === 'active' ? '会員' : '休会中';
-    var html =
-      '<div class="label">会員番号</div>' +
+    var isActive = data.status === 'active';
+    contentEl.innerHTML =
+      '<div class="label">MEMBER No.</div>' +
       '<div class="member-no">' + escapeHtml(data.membershipNo) + '</div>' +
-      '<div class="row">' +
-      '<div class="name">' + escapeHtml(data.name || 'お客様') + '様</div>' +
-      '<div class="badge">' + statusLabel + '</div>' +
-      '</div>' +
-      '<div class="note">この画面はLINEアプリ内でのみ正しく開けます</div>';
-    contentEl.innerHTML = html;
-    contentEl.className = '';
+      '<div class="rule"></div>' +
+      '<div class="foot">' +
+      '<div class="name">' + escapeHtml(data.name || 'お客') + ' 様</div>' +
+      '<div class="status' + (isActive ? '' : ' is-inactive') + '">' + (isActive ? 'ACTIVE' : 'INACTIVE') + '</div>' +
+      '</div>';
+    contentEl.classList.add('reveal');
   }
 
   function escapeHtml(str) {
